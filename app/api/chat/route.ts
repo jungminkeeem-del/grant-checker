@@ -1,5 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk'
-import { getRegulationText } from '@/lib/pdf-loader'
+import { REGULATION_TEXT } from '@/lib/regulation-text'
 
 const client = new Anthropic()
 
@@ -58,12 +58,10 @@ export async function POST(req: Request) {
   try {
     const { messages } = await req.json()
 
-    const regulationText = await getRegulationText()
-
     const stream = await client.messages.create({
       model: 'claude-sonnet-4-6',
       max_tokens: 2048,
-      system: buildSystemPrompt(regulationText),
+      system: buildSystemPrompt(REGULATION_TEXT),
       messages,
       stream: true,
     })
